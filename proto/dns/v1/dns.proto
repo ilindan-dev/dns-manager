@@ -1,0 +1,57 @@
+// DNS Manager API (v1)
+//
+// This gRPC definition provides a minimal interface for managing the
+// system's DNS servers. It is written to match the exercise described
+// in TASK.md (see repository root). The server-side implementation is
+// expected to apply changes to /etc/resolv.conf and validate input.
+// Authentication is intentionally omitted per the task requirements.
+
+syntax = "proto3";
+
+package dns.v1;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/ilindan-dev/dns-manager/proto/dns/v1";
+
+// DNSManager exposes simple operations to add, remove and list DNS
+// server addresses. The service assumes the server process will
+// translate these RPCs into updates to /etc/resolv.conf and handle
+// invalid input gracefully.
+service DNSManager {
+
+  // AddDNSServer adds a single DNS server address (typically an IP
+  // like "8.8.8.8") to the system resolver configuration. The server
+  // must validate the address format and return an error for invalid
+  // values. No payload is returned on success (google.protobuf.Empty).
+  rpc AddDNSServer(AddDNSServerRequest) returns (google.protobuf.Empty);
+
+  // RemoveDNSServer removes the given DNS server address from the
+  // resolver configuration. If the address is not present, the server
+  // should return a clear, recoverable error.
+  rpc RemoveDNSServer(RemoveDNSServerRequest) returns (google.protobuf.Empty);
+
+  // ListDNSServers returns the currently configured resolver addresses.
+  // This maps directly to the lines in /etc/resolv.conf that specify
+  // "nameserver" entries.
+  rpc ListDNSServers(google.protobuf.Empty) returns (ListDNSServersResponse);
+}
+
+// AddDNSServerRequest carries a single DNS server address. Use a
+// standard textual representation (IPv4/IPv6). The server should
+// validate syntax and reject malformed addresses.
+message AddDNSServerRequest {
+  string address = 1; // textual IP, e.g. "192.0.2.53" or "2001:db8::53"
+}
+
+// RemoveDNSServerRequest identifies a DNS server address to remove.
+message RemoveDNSServerRequest {
+  string address = 1; // must match an existing entry to be removed
+}
+
+// ListDNSServersResponse contains the ordered list of resolver
+// addresses. The order should reflect the order they appear in
+// /etc/resolv.conf.
+message ListDNSServersResponse {
+  repeated string addresses = 1; // ordered list of nameserver addresses
+}
