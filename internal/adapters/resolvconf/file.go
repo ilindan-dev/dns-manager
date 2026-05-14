@@ -35,12 +35,12 @@ var _ ports.ResolvConf = (*FileAdapter)(nil)
 // FileAdapter implements ports.ResolvConf to work with a local file.
 type FileAdapter struct {
 	filePath string
-	logger   slog.Logger
+	logger   *slog.Logger
 }
 
 // NewFileAdapter creates a new adapter instance.
 // Passing a path as a parameter allows for easy testing of the adapter on temporary files.
-func NewFileAdapter(path string, logger slog.Logger) *FileAdapter {
+func NewFileAdapter(path string, logger *slog.Logger) *FileAdapter {
 	return &FileAdapter{
 		filePath: path,
 		logger:   logger,

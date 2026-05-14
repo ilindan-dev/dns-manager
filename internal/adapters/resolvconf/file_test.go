@@ -22,7 +22,7 @@ func TestFileAdapter_RewriteAndGet(t *testing.T) {
 
 	nopLogger := slog.New(slog.NewTextHandler(io.Discard, nil))
 
-	adapter := NewFileAdapter(testFile, *nopLogger)
+	adapter := NewFileAdapter(testFile, nopLogger)
 	ctx := context.Background()
 
 	initialContent := []byte("search example.com\noptions ndots:5\nnameserver 1.1.1.1\n")
