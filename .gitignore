@@ -1,0 +1,27 @@
+# Binaries
+bin/
+build/
+
+# Test output and profiles
+*.test
+*.out
+cover.html
+
+# Environment variables
+.env
+.env.local
+
+# IDEs and OS specific
+.idea/
+.vscode/
+.DS_Store
+
+# Go workspaces
+go.work
+go.work.sum
+
+# Vendor directory
+vendor/
+
+# MD documentation
+TASK.md
